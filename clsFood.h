@@ -1,14 +1,16 @@
 #pragma once
 #include"clsUtil.h"
 #include <SFML/Graphics.hpp>  // For rendering
+#include <math.h>
 
 using namespace std;
 using namespace sf;
 
+    int Screen_Width = 800 ; 
+    int Screen_Hight = 600 ;
+
 class clsFood : public sf::Sprite {
 
-    
-    
     public :
 
 
@@ -21,22 +23,21 @@ class clsFood : public sf::Sprite {
         auto& texture1 = textures.back(); // Reference to the newly added texture
 
         // Load the texture from file
-        if (!texture1.loadFromFile("Apple.png")) {
+        if (!texture1.loadFromFile("snake-graphics.png" , IntRect(0,64*3,64,64) )) {
             throw std::runtime_error("Failed to load texture from Apple.png");
-        }
-    
+        }    
 
     this->setTexture(texture1);
     this->setPosition(Random_X() , Random_Y()); 
-    this->setScale(0.1,0.1);
+    // this->setScale(0.1,0.1);
 
     }
 
-    static float Random_X (int From = 0, int To = 765) {
+    static float Random_X (int From = 0, int To = (Screen_Width-64)) {
         return clsUtil::RandomNumberFromto(From,To) ;
         }
 
-    static float Random_Y(int From = 0 , int To = 565) {
+    static float Random_Y(int From = 0 , int To = (Screen_Hight-64)) {
         return clsUtil::RandomNumberFromto(From,To) ;
         }
 

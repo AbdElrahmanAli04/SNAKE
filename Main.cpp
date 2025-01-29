@@ -14,6 +14,9 @@ using namespace sf;
 
 int main() {
 
+    int Screen_Width = 800 ; 
+    int Screen_Hight = 600 ;
+
     clsUtil::SeedRandom();
 
     std::vector<sf::Texture> textures1;
@@ -21,7 +24,7 @@ int main() {
 
 
     //GameCompononets :
-    RenderWindow window(VideoMode(800, 600), "SNAKE");
+    RenderWindow window(VideoMode(Screen_Width, Screen_Hight), "SNAKE");
     clsSnake Snake ( textures1 );
 
     // Sprite Snake = SnakeIntializer(textures1);
@@ -47,7 +50,7 @@ int main() {
         window.clear(Color::Green);
 
         // Draw the sprite
-        window.draw(Snake);
+        window.draw(Snake.Body , &Snake.text);
         window.draw(Food);
         Snake.Movement();
         Snake.Eat(Food);
