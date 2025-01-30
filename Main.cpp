@@ -20,15 +20,15 @@ int main() {
     clsUtil::SeedRandom();
 
     std::vector<sf::Texture> textures1;
-    std::vector<sf::Texture> textures2;
+    Texture text ;
 
 
     //GameCompononets :
     RenderWindow window(VideoMode(Screen_Width, Screen_Hight), "SNAKE");
-    clsSnake Snake ( textures1 );
+    clsSnake Snake ( text );
 
     // Sprite Snake = SnakeIntializer(textures1);
-    clsFood Food = (textures2) ; 
+    clsFood Food = (textures1) ; 
 
 
 
@@ -50,7 +50,10 @@ int main() {
         window.clear(Color::Green);
 
         // Draw the sprite
-        window.draw(Snake.Body , &Snake.text);
+        for (clsSnake &Part : clsSnake::GetBody()) {
+        window.draw(Part);
+        }
+        
         window.draw(Food);
         Snake.Movement();
         Snake.Eat(Food);
