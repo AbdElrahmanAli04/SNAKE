@@ -29,7 +29,7 @@ class clsFood : public sf::Sprite {
 
     this->setTexture(texture1);
     this->setPosition(Random_X() , Random_Y()); 
-    // this->setScale(0.1,0.1);
+    this->setScale(0.5,0.5);
 
     }
 
@@ -41,8 +41,13 @@ class clsFood : public sf::Sprite {
         return clsUtil::RandomNumberFromto(From,To) ;
         }
 
-    void setRandPostion () {
-        this->setPosition(Random_X() , Random_Y());
+    void setRandPostion (vector <Vector2f> Body_Postions) {
+        do
+        {
+            this->setPosition(Random_X() , Random_Y());
+        } 
+        while (this->getGlobalBounds().contains(Body_Postions[0]));
+        
     } 
 
 };
