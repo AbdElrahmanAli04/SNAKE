@@ -16,14 +16,14 @@ int main() {
 
     int Screen_Width = 800 ; 
     int Screen_Hight = 600 ;
-
-
-
     clsUtil::SeedRandom();
     std::vector<sf::Texture> textures1;
     vector <clsSnake> Body ;
     vector <Vector2f> Body_Postions;
-    bool eaten_food = false ; 
+    bool eaten_food = false ;
+
+
+ 
    //GameCompononets :
     RenderWindow window(VideoMode(Screen_Width, Screen_Hight), "SNAKE");
     clsSnake Snake( Body , Body_Postions , true );
@@ -54,6 +54,7 @@ int main() {
         }
         window.draw(Food);
         Snake.Movement(Body);
+
         eaten_food = Snake.Check_for_eat (Food , Body) ; 
         if (eaten_food) {
         Snake.Eat(Food , Body , Body_Postions);
