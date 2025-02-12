@@ -10,7 +10,7 @@
 using namespace std;
 using namespace sf;
 
-// If you want to see the perforamnce while debuging , breakpoint at Increase len
+// ******* If you want to see the perforamnce while debuging , breakpoint at Increase len
 
 int main() {
 
@@ -54,7 +54,8 @@ int main() {
         }
         window.draw(Food);
         Snake.Movement(Body);
-
+        
+        //Check for food eating 
         eaten_food = Snake.Check_for_eat (Food , Body) ; 
         if (eaten_food) {
         Snake.Eat(Food , Body , Body_Postions);
@@ -73,22 +74,3 @@ int main() {
 
 
 
-
-/*
-What do we need to edit ? 
-
---Change the snake to a one that it's tail get longer when it eats more apples .
---Make the eating mechanism 
---Make a Score board that increase afte eating apples
---make obstacles to be avoided
---Cahang the snake.snake
---
-
-
-
-
-
-
-
-
-*/

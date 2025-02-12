@@ -28,7 +28,7 @@ class clsFood : public sf::Sprite {
         }    
 
     this->setTexture(texture1);
-    this->setPosition(Random_X() , Random_Y()); 
+    this->setPosition(200,100); //Change back to Random_X() , Random_Y() After testing 
     this->setScale(0.5,0.5);
 
     }
