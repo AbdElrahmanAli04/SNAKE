@@ -28,7 +28,7 @@ class clsFood : public sf::Sprite {
         }    
 
     this->setTexture(texture1);
-    this->setPosition(200,100); //Change back to Random_X() , Random_Y() After testing 
+    this->setPosition(Random_X(),Random_Y()); //Change back to Random_X() , Random_Y() After testing 
     this->setScale(0.5,0.5);
 
     }
@@ -46,8 +46,17 @@ class clsFood : public sf::Sprite {
         {
             this->setPosition(Random_X() , Random_Y());
         } 
-        while (this->getGlobalBounds().contains(Body_Postions[0]));
+        while (Intersection_With_Snake(Body_Postions));
         
     } 
+
+    bool Intersection_With_Snake(vector <Vector2f> Body_Postions){
+        for (int i = 1 ; i<Body_Postions.size() ; i++ ) {
+            if (this->getGlobalBounds().contains(Body_Postions[i])) {
+                return true ;
+            }
+        }
+        return false ;
+    }
 
 };
