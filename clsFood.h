@@ -13,6 +13,9 @@ class clsFood : public sf::Sprite {
 
     public :
 
+    clsFood(){
+        
+    }
 
     clsFood ( std::vector<sf::Texture> &textures ){
     
