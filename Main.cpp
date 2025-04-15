@@ -6,6 +6,8 @@
 #include "clsUtil.h"
 #include "clsFood.h"
 #include "clsText.h"
+#include "clsGame.h"
+
 
 using namespace std;
 using namespace sf;
@@ -14,27 +16,33 @@ using namespace sf;
 
 int main() {
 
-    enum Screentype {MainGame , StartMenu , Gameover} ;
-    Screentype CurrentScreen = MainGame ;
-
-    int Screen_Width = 800 ; 
-    int Screen_Hight = 600 ;
+    
     sf::Font GameoverFont , RegularFont ;
     GameoverFont.loadFromFile("game_over.ttf") ;
     RegularFont.loadFromFile("Playball-Regular.ttf") ;
 
+
+    enum Screentype {MainGame , StartMenu , Gameover} ;
+    Screentype CurrentScreen = StartMenu ;
+
+    int Screen_Width = 800 ; 
+    int Screen_Hight = 600 ;
+
     clsUtil::SeedRandom();
    //GameCompononets :
 
-    Color WindowColor ; 
-    WindowColor.r = 250 , WindowColor.g =  240 , WindowColor.b =  190 ;
+    Color WindowColor  = Color (250,240,190); 
 
     RenderWindow window(VideoMode(Screen_Width, Screen_Hight), "SNAKE");
 
-    clsGameText Gametexts ;
-    clsGameText GameoverText = Gametexts.Game_Over(GameoverFont);
-    clsGameText PlayAgainText = Gametexts.Play_Again(RegularFont ) ;
-    clsGameText ExitText = Gametexts.Exit(RegularFont ) ;
+    clsGameText GameoverText = clsGameText(GameoverFont, "Game Over", 150, sf::Color::Red, 250, 80 );
+    clsGameText PlayAgainText = clsGameText(RegularFont, "Play Again ?", 50, sf::Color::Blue, 50, 370);
+    clsGameText ExitText = clsGameText(RegularFont, "Exit", 50, sf::Color::Blue, 600, 370);
+    clsGameText Main_Menu_Text = clsGameText(GameoverFont, "Main Menu", 150, Color(34, 139, 34), 250, 100);
+    clsGameText Start_Text = clsGameText(RegularFont, "Start", 50, sf::Color::Blue, 100, 370);
+
+    // For Main_Menu_Text, add the outline after construction:
+
 
     bool Restart = true ; 
 
@@ -52,6 +60,56 @@ int main() {
 
         switch (CurrentScreen)
         {
+
+
+            case Screentype::StartMenu : {
+
+        
+            
+                window.clear(WindowColor) ;
+    
+                window.draw(Main_Menu_Text);
+                window.draw (ExitText);
+    
+                window.draw (Start_Text);
+                
+    
+                while (window.pollEvent(event)  ) {
+                    sf::FloatRect MousePostion (float(Mouse::getPosition(window).x) , float (Mouse::getPosition(window).y ) , 1,1) ;
+    
+                    if ( ExitText.getGlobalBounds().intersects(MousePostion) ) {
+                            ExitText.setStyle(Text::Bold) ;
+    
+                        if (Mouse::isButtonPressed(Mouse::Button::Left) ) {
+                            window.close();
+                        }
+                    }
+    
+                    else {
+                        ExitText.setStyle(Text::Regular) ;
+                    }
+    
+    
+                    if ( Start_Text.getGlobalBounds().intersects(MousePostion) ) {
+                        Start_Text.setStyle(Text::Bold) ;
+    
+                        if (Mouse::isButtonPressed(Mouse::Button::Left) ) {
+                            CurrentScreen = Screentype::MainGame ;
+                        }
+                        }
+    
+                    else {
+                        Start_Text.setStyle(Text::Regular) ;
+                    }                
+    
+                }   
+            
+    
+                window.display();
+                break;
+            
+            }
+    
         
         case Screentype::MainGame : {
 
@@ -106,11 +164,10 @@ int main() {
             break;
         }
 
-        case Screentype::StartMenu :
-            break;
 
+        
         case Screentype ::Gameover : 
-            window.clear() ;
+            window.clear(WindowColor) ;
 
             window.draw(GameoverText);
             window.draw (ExitText);
