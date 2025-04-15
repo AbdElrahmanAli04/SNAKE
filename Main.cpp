@@ -136,7 +136,7 @@ int main() {
             // Event handling
             while (window.pollEvent(event)  ) {
                 
-                if (event.type == Event::Closed || Snake.Ate_It_self(Body)  ) {
+                if (event.type == Event::Closed /*|| Snake.Ate_It_self(Body)*/  ) {
                     CurrentScreen = Screentype::Gameover;
                 }
 

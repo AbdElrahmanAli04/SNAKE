@@ -35,7 +35,7 @@ class clsSnake : public sf::RectangleShape {
     }
 
     bool Is_Head_In_boundries(vector <clsSnake> &Body , Keyboard::Key key){
-        clsSnake Head = Body[0] ;
+
         switch (key)
         {
 
@@ -70,11 +70,50 @@ class clsSnake : public sf::RectangleShape {
         return false ;
     }
 
+
+    void Bring_To_Screen (vector <clsSnake> &Body , Keyboard::Key key) {
+        switch (key)
+        {
+
+        case Keyboard::Key::Down :
+            if (Body[0].getPosition().y > Screen_Hight-64*0.6 ){   
+                Body[0].setPosition ( Body[0].getPosition().x , 0) ;
+            }
+            break;
+
+        case Keyboard::Key::Left :
+            if (Body[0].getPosition().x < 0 ){   
+                Body[0].setPosition ( Screen_Width-64*0.6 , Body[0].getPosition().y) ;
+            }
+            break;
+
+        case Keyboard::Key::Up :
+            if (Body[0].getPosition().y < 0 ){   
+                Body[0].setPosition ( Body[0].getPosition().x , Screen_Hight-64*0.6) ;
+            }
+            break;
+        
+        case Keyboard::Key::Right :
+            if (Body[0].getPosition().x > Screen_Width-64*0.6 ){   
+                Body[0].setPosition ( 0 , Body[0].getPosition().y) ;
+
+            }
+        break;
+
+        default:
+            break;
+        }
+
+
+    }
+
+
     void MyMove(vector<clsSnake>& Body, Keyboard::Key key, sf::Time &Deltatime) {
         static sf::Clock clock;
         static sf::Time accumulatedTime = sf::Time::Zero;    
     
-        if (Is_Head_In_boundries(Body, key)) {
+        if (1) {
+            
             sf::Time frameTime = clock.restart();
             if (frameTime.asSeconds() > 0.1f) {  // Cap maximum frame time
                 frameTime = sf::seconds(0.1f);
@@ -85,6 +124,7 @@ class clsSnake : public sf::RectangleShape {
             
             while (accumulatedTime.asSeconds() >= moveInterval) {
                 accumulatedTime -= sf::seconds(moveInterval);
+                Bring_To_Screen(Body , key) ;
                 Filler_Movement(Body[0], key, Deltatime);
                 
                 for (size_t i = Body.size() - 1; i > 0; i--) {
