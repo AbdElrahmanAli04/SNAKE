@@ -6,8 +6,8 @@
 using namespace std;
 using namespace sf;
 
-    int Screen_Width = 800 ; 
-    int Screen_Hight = 600 ;
+    const int Screen_Width = 800 ; 
+    const int Screen_Hight = 600 ;
 
 class clsFood : public sf::Sprite {
 

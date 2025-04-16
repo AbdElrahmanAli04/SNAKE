@@ -1,38 +1,78 @@
-#pragma once
-#include <SFML/Graphics.hpp>
+#pragma once 
+
 #include "clsSnake.h"
-#include "clsFood.h"
-#include "clsText.h"
+#include <SFML/Window.hpp>
+#include "clsMainMenu.h"
+
 
 class clsGame {
-public:
-    enum Screentype {MainGame, StartMenu, Gameover};
-    Screentype CurrentScreen = StartMenu;
-    
-    const int Screen_Width = 800;
-    const int Screen_Hight = 600;
-    sf::RenderWindow window;
-    sf::Font GameoverFont, RegularFont;
-    
-    sf::Color WindowColor;
-    sf::Color MainMenu_Color;
-    
-    // Game components
-    clsGameText GameoverText = clsGameText(GameoverFont, "Game Over", 150, sf::Color::Red, 250, 50);
-    clsGameText PlayAgainText = clsGameText(RegularFont, "Play Again ?", 50, sf::Color::Blue, 30, 370);
-    clsGameText ExitText = clsGameText(RegularFont, "Exit", 50, sf::Color::Blue, 600, 370);
-    clsGameText Main_Menu_Text = clsGameText(GameoverFont, "Main Menu", 150, Color(34, 139, 34), 250, 100);
-    clsGameText Start_Text = clsGameText(RegularFont, "Start", 50, sf::Color::Blue, 100, 370);
-
-    
-    bool Restart;
+    private : 
+    Color WindowColor  = Color (250,240,190); 
     std::vector<sf::Texture> textures1;
-    bool eaten_food;
-    std::vector<clsSnake> Body;
-    std::vector<sf::Vector2f> Body_Postions;
+    bool eaten_food = false ;
+    vector <clsSnake> Body ;
+    vector <Vector2f> Body_Postions;    
     clsSnake Snake;
-    clsFood Food;
-    sf::Clock gameClock;
+    clsFood Food  ; 
+
+    public : 
+
+    clsGame() {
+
+    }
+
+    void Setup ( Event &event , RenderWindow &window , Screentype &CurrentScreen , Clock &gameClock ,  bool &Restart) {
+
+        Time deltaTime = gameClock.restart();
 
 
-};
+        if (Restart) {
+            textures1.clear();
+            eaten_food = false ;
+            Body.clear() ;
+            Body_Postions.clear();    
+            Snake = clsSnake ( Body , Body_Postions , true );
+            Food = clsFood (textures1 ) ;
+            Restart = false ;
+            gameClock.restart();
+
+        }
+
+        deltaTime = gameClock.restart() ; // Get elapsed time since last frame
+    
+
+
+
+    // Event handling
+        while (window.pollEvent(event)  ) {
+            
+            if (event.type == Event::Closed || Snake.Ate_It_self(Body)  ) {
+                CurrentScreen = Screentype::Gameover;
+            }
+
+        }
+
+        // Clear the window
+        window.clear(WindowColor);
+
+        // Draw the sprite
+        for (clsSnake &Part : Body) {
+        window.draw(Part);
+        }
+        window.draw(Food);
+        Snake.Movement(Body , deltaTime );
+        
+        //Check for food eating 
+        eaten_food = Snake.Check_for_eat (Food , Body) ; 
+        if (eaten_food) {
+        Snake.Eat(Food , Body , Body_Postions);
+        eaten_food = false ;
+        }
+
+        // Display the content
+        window.display();
+
+    
+    }
+
+} ;

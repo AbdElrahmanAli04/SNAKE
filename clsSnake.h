@@ -16,7 +16,8 @@ class clsSnake : public sf::RectangleShape {
         bool Change_In_Dir = false ; 
         float Speed = 2000000;
         vector <sf::Keyboard::Key> Changing_Dir_Vector = {Keyboard::Key::A} ; 
-        Color Snakecolor ; 
+        sf::Color Snakecolor = sf::Color (85,107,47) ; 
+        int GrowthRate = 10 ;
 
     Keyboard::Key Get_Pressed_key(){
         if (Keyboard::isKeyPressed(Keyboard::Key::Right)) {
@@ -34,6 +35,7 @@ class clsSnake : public sf::RectangleShape {
         return Keyboard::A ;
     }
 
+    //Not used for now but may be used in the future 
     bool Is_Head_In_boundries(vector <clsSnake> &Body , Keyboard::Key key){
 
         switch (key)
@@ -70,7 +72,7 @@ class clsSnake : public sf::RectangleShape {
         return false ;
     }
 
-
+    //Brings back the snake to screen if it gets out of it 
     void Bring_To_Screen (vector <clsSnake> &Body , Keyboard::Key key) {
         switch (key)
         {
@@ -107,12 +109,11 @@ class clsSnake : public sf::RectangleShape {
 
     }
 
-
+    //The logic of Moving by the last postion of the last segemnt
     void MyMove(vector<clsSnake>& Body, Keyboard::Key key, sf::Time &Deltatime) {
         static sf::Clock clock;
         static sf::Time accumulatedTime = sf::Time::Zero;    
     
-        if (1) {
             
             sf::Time frameTime = clock.restart();
             if (frameTime.asSeconds() > 0.1f) {  // Cap maximum frame time
@@ -124,15 +125,17 @@ class clsSnake : public sf::RectangleShape {
             
             while (accumulatedTime.asSeconds() >= moveInterval) {
                 accumulatedTime -= sf::seconds(moveInterval);
-                Bring_To_Screen(Body , key) ;
+
+                Bring_To_Screen(Body , key) ;  
                 Filler_Movement(Body[0], key, Deltatime);
                 
                 for (size_t i = Body.size() - 1; i > 0; i--) {
                     Body[i].setPosition(Body[i - 1].getPosition());
                 }
             }
-        }
-    }    
+    }  
+    
+
     //The movemen of any segment except the head
     void Filler_Movement(clsSnake &filler , Keyboard::Key key , Time &Deltatime  ) {
 
@@ -171,34 +174,30 @@ class clsSnake : public sf::RectangleShape {
 
     }
 
-    clsSnake (vector <clsSnake> &Body ) {
-        Snakecolor.r = 85 , Snakecolor.g = 107 , Snakecolor.b = 47 ;         
-        this->setSize({64,64});
-            this->setFillColor(Snakecolor);
-            this->setPosition(100,100);
-            this->setScale(0.6,0.6);
-            this->PressedKey = Body.back().PressedKey ; 
-    }
+
 
 
     clsSnake (vector <clsSnake> &Body , vector <Vector2f> &Body_Postions , bool Is_head = false ) {
         
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
-    Snakecolor.r = 85 , Snakecolor.g = 107 , Snakecolor.b = 47 ; 
     this->setSize({64,64});
     this->setFillColor(Snakecolor);
     this->setPosition(100,100);
     this->setScale(0.6,0.6);
-    this->setOutlineColor(Color::Black);
-    this->setOutlineThickness(3);
 
     if (Is_head) {
+            this->setOutlineColor(Color::Black);
+            this->setOutlineThickness(3);
             Body.push_back(*this);
             Body_Postions.push_back(this->getPosition());
+            
+            for (int i = 0 ; i<2 ; i++ ){
+                Increaselen(Body,Body_Postions); // To add a small tale in the beggining of the game 
+            }
     }
 
     }
 
+    //Handels the changing in direction and prevent the user to move in 2 opposite ways or move in diagonal way 
     void Movement ( vector <clsSnake> &Body ,  sf::Time &Deltatime ) {
         
         Keyboard::Key newKey = Get_Pressed_key();
@@ -207,24 +206,21 @@ class clsSnake : public sf::RectangleShape {
             Changing_Dir_Vector[0] = newKey ;
         }
 
-        if (newKey!=Body[0].PressedKey && (newKey>=Keyboard::Key::Left && newKey<=Keyboard::Key::Down ))  //Ensures The new key is in our controls && change in dir happens
-        {
+        if (newKey!=Body[0].PressedKey && (newKey>=Keyboard::Key::Left && newKey<=Keyboard::Key::Down ) && (((int(newKey)+ Body[0].PressedKey) != 143) && ((int(newKey)+Body[0].PressedKey) != 147)  ))  //Ensures The new key is in our controls && change in dir happens
+        {                                                                                                                                                           //The 143 (Left+Right)  and 147 (Down+UP) Gaurntee that the Snake will not move in the opposite direction
             Change_In_Dir = true;
             if (Changing_Dir_Vector.back()!= newKey || Changing_Dir_Vector.size() == 1) {
                 Changing_Dir_Vector.push_back(newKey);
+                Body[0].PressedKey = newKey;
+
             }
 
         }
 
         else {
-            Change_In_Dir = false ; 
+            Change_In_Dir = false ; // Just a Dummy Step to understand the logic
         }
 
-        if (newKey != Keyboard::Key::A) {  // If a new key is pressed, update direction
-            Body[0].PressedKey = newKey;
-        }
-
-        
         switch (Body[0].PressedKey)
         {
 
@@ -251,10 +247,11 @@ class clsSnake : public sf::RectangleShape {
     }   
 
 
+    //Handeles the Eating mechanism
     void Eat(clsFood &Food , vector <clsSnake> &Body , vector <Vector2f> &Body_Postions) {
         if ( Check_for_eat (Food , Body) ) {
             Food.setRandPostion(Body_Postions);
-            Increaselen(Body , Body_Postions , 10);
+            Increaselen(Body , Body_Postions );
         }
     }
 
@@ -265,13 +262,15 @@ class clsSnake : public sf::RectangleShape {
         return false ;
     }    
     
-    void Increaselen(vector<clsSnake> &Body, vector<Vector2f> &Body_Postions, int growthRate) {
+    //Increase the Snake length if it eats an apple 
+    void Increaselen(vector<clsSnake> &Body, vector<Vector2f> &Body_Postions) {
         if (Body.empty()) return; // Ensure there's at least one segment
     
         Vector2f lastPosition = Body.back().getPosition();  
     
-        for (int i = 0; i < growthRate; i++) { 
-            clsSnake Filler(Body);  
+
+        for (int i = 0; i < GrowthRate; i++) { 
+            clsSnake Filler(Body , Body_Postions);  
             Filler.setPosition(lastPosition.x, lastPosition.y);  
     
             Body.push_back(Filler);
@@ -279,12 +278,15 @@ class clsSnake : public sf::RectangleShape {
         }
     }
     
+    //Check for death 
     bool Ate_It_self(vector<clsSnake> &Body){
-        for (short i = Body.size()-1 ; i>30 ; i--) {
-            if (Body[1].getGlobalBounds().intersects(Body[i].getGlobalBounds())) {
-                return true ;
+
+
+        for (int i = 31 ; i<Body.size()-1 ; i+=10) {
+                if ( Body[0].getGlobalBounds().intersects(Body[i].getGlobalBounds()) ) {
+                    return true ;
+                }    
             }
-        }
         return false ;
     }
 

@@ -10,7 +10,7 @@ class clsGameText : public sf::Text {
     public:
 
     clsGameText() {
-         }
+    }
 
  
         clsGameText(sf::Font &Font, string Text, int size, sf::Color color, int x, int y , sf::Color OutlineColor = sf::Color::Black) {
