@@ -7,6 +7,7 @@ A classic Snake game implementation using C++ and SFML graphics library. The gam
 - Smooth snake movement with collision detection
 - Main menu and game over screens
 - Smooth controls using arrow keys
+- Dynamic Score board for tracing the Player's score  
 - Wrapping boundaries (snake appears on opposite side when crossing screen edges)
 - Progressive difficulty (snake grows longer with each apple)
 
