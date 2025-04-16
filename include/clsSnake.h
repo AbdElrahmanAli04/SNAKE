@@ -282,7 +282,7 @@ class clsSnake : public sf::RectangleShape {
     bool Ate_It_self(vector<clsSnake> &Body){
 
 
-        for (int i = 31 ; i<Body.size()-1 ; i+=10) {
+        for (int i = GrowthRate*3+1 ; i<Body.size()-1 ; i+=GrowthRate) {
                 if ( Body[0].getGlobalBounds().intersects(Body[i].getGlobalBounds()) ) {
                     return true ;
                 }    
