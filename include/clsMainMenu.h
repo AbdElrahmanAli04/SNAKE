@@ -26,8 +26,8 @@ class clsMainMenu {
 
     clsMainMenu () {
         //Setting up the fonts and the Texts
-        GameoverFont.loadFromFile("game_over.ttf") ;
-        RegularFont.loadFromFile("Playball-Regular.ttf") ;
+        GameoverFont.loadFromFile("assets/game_over.ttf") ;
+        RegularFont.loadFromFile("assets/Playball-Regular.ttf") ;
 
         ExitText = clsGameText(RegularFont, "Exit", 50, sf::Color::Blue, 600, 370);
         Main_Menu_Text = clsGameText(GameoverFont, "Main Menu", 150, sf::Color(34, 139, 34), 250, 100);

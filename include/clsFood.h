@@ -26,7 +26,7 @@ class clsFood : public sf::Sprite {
         auto& texture1 = textures.back(); // Reference to the newly added texture
 
         // Load the texture from file
-        if (!texture1.loadFromFile("snake-graphics.png" , IntRect(0,64*3,64,64) )) {
+        if (!texture1.loadFromFile("assets/snake-graphics.png" , IntRect(0,64*3,64,64) )) {
             throw std::runtime_error("Failed to load texture from Apple.png");
         }    
 

@@ -29,12 +29,13 @@
             "command": "g++",
             "args": [
                 "-g",
-                "${workspaceFolder}/Main.cpp",
+                "${workspaceFolder}/src/Main.cpp",
                 "-o",
                 "${workspaceFolder}/snake",
                 "-lsfml-graphics",
                 "-lsfml-window",
-                "-lsfml-system"
+                "-lsfml-system",
+                "-I${workspaceFolder}/include"
             ],
             "group": {
                 "kind": "build",
