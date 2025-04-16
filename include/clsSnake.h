@@ -168,7 +168,7 @@ class clsSnake : public sf::RectangleShape {
 
 
     public :
-    
+
 
     clsSnake(){
 
@@ -249,7 +249,7 @@ class clsSnake : public sf::RectangleShape {
 
     //Handeles the Eating mechanism
     void Eat(clsFood &Food , vector <clsSnake> &Body , vector <Vector2f> &Body_Postions) {
-        if ( Check_for_eat (Food , Body) ) {
+        if ( Check_for_eat (Food , Body ) ) {
             Food.setRandPostion(Body_Postions);
             Increaselen(Body , Body_Postions );
         }
@@ -261,6 +261,16 @@ class clsSnake : public sf::RectangleShape {
         } 
         return false ;
     }    
+
+    bool Check_for_eat (clsFood &Food , vector <clsSnake> &Body , short &score  ) { //Over loaded for Score feature
+        if (Food.getGlobalBounds().intersects(Body[0].getGlobalBounds())) {
+            score += 10 ;
+            return true ; 
+        } 
+        return false ;
+    }    
+    
+
     
     //Increase the Snake length if it eats an apple 
     void Increaselen(vector<clsSnake> &Body, vector<Vector2f> &Body_Postions) {

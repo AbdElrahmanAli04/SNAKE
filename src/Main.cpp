@@ -10,10 +10,9 @@
 using namespace std;
 using namespace sf;
 
-
 Screentype CurrentScreen = StartMenu ;
 
-RenderWindow window(VideoMode(Screen_Width, Screen_Hight), "SNAKE");
+RenderWindow window(VideoMode(Screen_Width, Screen_Hight), "SNAKE" );
 
 Clock gameClock; 
 clsMainMenu MainMenu ; 
@@ -21,6 +20,7 @@ clsGameOver GameOver ;
 clsGame Game ;
 
 bool Restart = true ; 
+
 
 
 int main() {
